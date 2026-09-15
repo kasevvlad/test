@@ -1,0 +1,20 @@
+{
+  "name": "Symfony Dev",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/var/www/html",
+  "forwardPorts": [8000, 5432, 5050],
+  "postStartCommand": "bash -lc 'symfony serve --no-tls --port=8000 --allow-http --allow-all-ip > /var/www/html/server.log 2>&1 &'",
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "esbenp.prettier-vscode"
+      ]
+    }
+  }
+}
