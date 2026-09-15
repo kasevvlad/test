@@ -2,9 +2,9 @@ services:
   app:
     build: .
     volumes:
-      - ..:/var/www/html
+      - .:/var/www/html
     ports:
-      - "8000:8000"
+      - "${APP_PORT:-8000}:8000"
     depends_on:
       db:
         condition: service_healthy
@@ -19,7 +19,7 @@ services:
       POSTGRES_USER: symfony
       POSTGRES_PASSWORD: symfony
     ports:
-      - "5432:5432"
+      - "${DB_PORT:-5432}:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
     healthcheck:
@@ -38,7 +38,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "5050:80"
+      - "${PGADMIN_PORT:-5050}:80"
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 

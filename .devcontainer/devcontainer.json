@@ -1,6 +1,6 @@
 {
   "name": "Symfony Dev",
-  "dockerComposeFile": "docker-compose.yml",
+  "dockerComposeFile": "../docker-compose.yml",
   "service": "app",
   "workspaceFolder": "/var/www/html",
   "forwardPorts": [8000, 5432, 5050],
