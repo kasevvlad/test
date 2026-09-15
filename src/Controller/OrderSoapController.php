@@ -32,7 +32,21 @@ class OrderSoapController
         path: '/api/soap/orders',
         summary: 'SOAP endpoint to create an order',
         requestBody: new OA\RequestBody(
-            content: new OA\MediaType(mediaType: 'text/xml')
+            content: new OA\MediaType(
+                mediaType: 'text/xml',
+                example: <<<XML
+                    <?xml version="1.0" encoding="UTF-8"?>
+                    <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                      <SOAP-ENV:Body>
+                        <ns1:createOrder xmlns:ns1="urn:OrderService" SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+                          <customerName xsi:type="xsd:string">John Doe</customerName>
+                          <amount xsi:type="xsd:string">100.50</amount>
+                          <createdAt xsi:type="xsd:string">2026-09-15</createdAt>
+                        </ns1:createOrder>
+                      </SOAP-ENV:Body>
+                    </SOAP-ENV:Envelope>
+                    XML
+            )
         ),
         responses: [
             new OA\Response(response: 200, description: 'SOAP envelope with the created order id, or a SOAP Fault'),
