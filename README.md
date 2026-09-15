@@ -97,6 +97,20 @@ curl "http://localhost:8000/api/orders/stats?group=month&page=1&perPage=20"
 
 Returns `400` on an invalid `group`, `page` or `perPage`.
 
+### `GET /api/orders/{id}`
+
+Get a single order.
+
+```
+curl "http://localhost:8000/api/orders/1"
+```
+
+```json
+{"id":1,"customerName":"John Doe","amount":42.5,"createdAt":"2026-03-01T10:00:00+00:00"}
+```
+
+Returns `404` when the order does not exist.
+
 ### `POST /api/soap/orders` (SOAP)
 
 Creates an order from a SOAP request. The WSDL is served on `GET /api/soap/orders`.
