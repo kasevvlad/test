@@ -47,6 +47,24 @@ Once the app is running, the OpenAPI/Swagger documentation is available at:
 - http://localhost:8000/api/doc — Swagger UI
 - http://localhost:8000/api/doc.json — raw OpenAPI spec
 
+## Endpoints
+
+### `GET /api/price`
+
+Looks up the price in EUR of a tile.expert article by scraping its product page.
+
+Query parameters: `factory`, `collection`, `article` (all required).
+
+```
+curl "http://localhost:8000/api/price?factory=marca-corona&collection=arteseta&article=k263-arteseta-camoscio-s000628660"
+```
+
+```json
+{"price":59.99,"factory":"marca-corona","collection":"arteseta","article":"k263-arteseta-camoscio-s000628660"}
+```
+
+Returns `400` when a parameter is missing, `404` when tile.expert has no matching article.
+
 ## Tests
 
 ```
