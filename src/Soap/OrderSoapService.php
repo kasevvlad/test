@@ -3,12 +3,15 @@
 namespace App\Soap;
 
 use App\Entity\Order;
+use App\Search\OrderSearchIndex;
 use Doctrine\ORM\EntityManagerInterface;
 
 class OrderSoapService
 {
-    public function __construct(private readonly EntityManagerInterface $entityManager)
-    {
+    public function __construct(
+        private readonly EntityManagerInterface $entityManager,
+        private readonly OrderSearchIndex $searchIndex,
+    ) {
     }
 
     public function createOrder(string $customerName, string $amount, string $createdAt = ''): int
@@ -32,6 +35,11 @@ class OrderSoapService
         $order = new Order($customerName, $amount, $createdAtDate);
         $this->entityManager->persist($order);
         $this->entityManager->flush();
+
+        try {
+            $this->searchIndex->index($order);
+        } catch (\Throwable) {
+        }
 
         return $order->getId();
     }

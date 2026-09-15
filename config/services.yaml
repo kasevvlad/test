@@ -15,11 +15,16 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
             string $cacheDir: '%kernel.cache_dir%'
+            string $manticoreUrl: '%env(MANTICORE_URL)%'
 
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
         resource: '../src/'
+
+    App\Search\OrderSearchIndex:
+        bind:
+            string $environment: '%kernel.environment%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

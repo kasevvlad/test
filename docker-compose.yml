@@ -8,6 +8,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      manticore:
+        condition: service_healthy
 
   db:
     image: postgres:15
@@ -40,6 +42,28 @@ services:
     volumes:
       - pgadmin_data:/var/lib/pgadmin
 
+  manticore:
+    image: manticoresearch/manticore:29.9.0
+    restart: always
+    ports:
+      - "${MANTICORE_PORT:-9308}:9308"
+    ulimits:
+      nproc: 65535
+      nofile:
+        soft: 65535
+        hard: 65535
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - manticore_data:/var/lib/manticore
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "-", "http://localhost:9308/"]
+      interval: 5s
+      retries: 10
+      start_period: 10s
+
 volumes:
   db_data: {}
   pgadmin_data: {}
+  manticore_data: {}

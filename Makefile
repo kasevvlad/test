@@ -1,4 +1,4 @@
-.PHONY: build up down restart logs sh migrate test
+.PHONY: build up down restart logs sh migrate reindex test
 
 build:
 	docker compose build
@@ -19,6 +19,9 @@ sh:
 
 migrate:
 	docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
+
+reindex:
+	docker compose exec app php bin/console app:orders:reindex
 
 test:
 	docker compose exec app php bin/console doctrine:database:create --env=test --if-not-exists
