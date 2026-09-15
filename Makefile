@@ -1,4 +1,4 @@
-.PHONY: build up down restart logs sh test
+.PHONY: build up down restart logs sh migrate test
 
 build:
 	docker compose build
@@ -17,5 +17,10 @@ logs:
 sh:
 	docker compose exec app bash
 
+migrate:
+	docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
+
 test:
+	docker compose exec app php bin/console doctrine:database:create --env=test --if-not-exists
+	docker compose exec app php bin/console doctrine:migrations:migrate --env=test --no-interaction
 	docker compose exec app php bin/phpunit

@@ -13,16 +13,21 @@ cp .env .env.local
 docker compose up -d --build
 ```
 
-The app installs its dependencies and runs during the image build, so no extra setup step is required after `up`.
+The app installs its dependencies during the image build. After the containers are up, apply the database migrations:
+
+```
+docker compose exec app php bin/console doctrine:migrations:migrate --no-interaction
+```
 
 With `make` installed, the same is available as:
 
 ```
 make build
 make up
+make migrate
 ```
 
-Other Makefile targets: `make down`, `make restart`, `make logs`, `make sh` (shell into the app container), `make test` (run the test suite).
+Other Makefile targets: `make down`, `make restart`, `make logs`, `make sh` (shell into the app container), `make test` (run the test suite, creating and migrating the test database first).
 
 ## Services
 
@@ -64,6 +69,33 @@ curl "http://localhost:8000/api/price?factory=marca-corona&collection=arteseta&a
 ```
 
 Returns `400` when a parameter is missing, `404` when tile.expert has no matching article.
+
+### `GET /api/orders/stats`
+
+Number of orders grouped by day, month or year, paginated.
+
+Query parameters: `group` (`day`, `month` or `year`, required), `page` (default `1`), `perPage` (default `20`, max `100`).
+
+```
+curl "http://localhost:8000/api/orders/stats?group=month&page=1&perPage=20"
+```
+
+```json
+{
+  "page": 1,
+  "perPage": 20,
+  "totalItems": 3,
+  "totalPages": 1,
+  "group": "month",
+  "items": [
+    {"period": "2026-02", "count": 2},
+    {"period": "2026-01", "count": 2},
+    {"period": "2025-12", "count": 1}
+  ]
+}
+```
+
+Returns `400` on an invalid `group`, `page` or `perPage`.
 
 ## Tests
 
